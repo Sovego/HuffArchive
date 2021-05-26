@@ -93,18 +93,16 @@ namespace HuffArchive
         public void Decode()
         {
             
-            FillEncodingArray(Root, "", "");
+           
             string decoded = "";
             string tmpstr = "";
             string compress = "";
             string bytefile;
-            StreamWriter sw = new StreamWriter("unarchive.txt", false);
-            BinaryReader fssStream = new BinaryReader(new FileStream("archive.txt", FileMode.Open),Encoding.ASCII);
-            byte endbyte = 0;
-            while (Convert.ToChar(endbyte) != '\n')
-            {
-                endbyte = (byte) fssStream.ReadByte();
-            }
+            StreamWriter sw = new StreamWriter("unarchive.txt", false,Encoding.UTF8);
+            BinaryReader fssStream = new BinaryReader(new FileStream("archive.txt", FileMode.Open),Encoding.UTF8); 
+            Root = Program.RecoverTree(Root, fssStream);
+            FillEncodingArray(Root, "", "");
+           // fssStream.ReadChar();
             while (fssStream.BaseStream.Position < fssStream.BaseStream.Length-1)
             {
                 bytefile = Convert.ToString((int)fssStream.ReadByte(), 2);
@@ -132,6 +130,8 @@ namespace HuffArchive
                     }
               //  }
             }
+            sw.Close();
+            fssStream.Close();
             //return decoded;
         }
         public bool IsLeaf(Node node)

@@ -10,7 +10,7 @@ namespace HuffArchive
     class Program
     {
         public static byte Delta=0;
-        private static Node RecoverTree(Node head, BinaryReader sr)
+        public static Node RecoverTree(Node head, BinaryReader sr)
         {
             Node newLeft = new Node();
             Node newRight = new Node();
@@ -37,13 +37,13 @@ namespace HuffArchive
             string input;
             string pathtofile;
             Console.WriteLine("Input path to file");
-            //HuffmanTree huffmanTree = new HuffmanTree();
+            HuffmanTree huffmanTree = new HuffmanTree();
             pathtofile=Console.ReadLine();
             using (StreamReader sr = new StreamReader(pathtofile))
             {
                 input = sr.ReadToEnd();
             }
-            HuffmanTree huffmanTree = new HuffmanTree();
+            //HuffmanTree huffmanTree = new HuffmanTree();
             // Build the Huffman tree
             huffmanTree.Build(input);
             // Encode
@@ -77,12 +77,12 @@ namespace HuffArchive
             }
             using (StreamWriter sw = new StreamWriter("archive.txt",false))
             {
-                sw.WriteLine(EncTree(huffmanTree.Root));
+                sw.Write(EncTree(huffmanTree.Root));
             }
 
             using (FileStream fs = new FileStream("archive.txt", FileMode.Append))
             {
-                fs.Position = fs.Length;
+                //fs.Position = fs.Length-1;
                 fs.Write(bytes.ToArray());
                 fs.WriteByte(Delta);
             }
@@ -90,9 +90,9 @@ namespace HuffArchive
  
             // Decode
             huffmanTree.Root = new Node();
-            BinaryReader ssr = new BinaryReader(new FileStream("archive.txt",FileMode.Open));
-                huffmanTree.Root = RecoverTree(huffmanTree.Root, ssr);
-            ssr.Close();
+            //BinaryReader ssr = new BinaryReader(new FileStream("archive.txt",FileMode.Open));
+                
+           // ssr.Close();
             huffmanTree.Decode();
             Console.WriteLine("Decoded");
             //Console.WriteLine("Decoded: " + decoded);
